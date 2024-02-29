@@ -1,0 +1,38 @@
+// Include library untuk ESP8266
+#include <ESP8266WiFi.h>
+
+// Tentukan pin untuk potensiometer dan lampu LED
+const int potentiometerPin = A0; // Ganti A0 dengan pin yang Anda gunakan untuk potensiometer
+const int lampuPin = D2; // Ganti D5 dengan pin yang Anda gunakan untuk lampu LED
+
+void setup() {
+  // Inisialisasi Serial Monitor
+  Serial.begin(9600);
+
+  // Set pin potensiometer sebagai INPUT
+  pinMode(potentiometerPin, INPUT);
+
+  // Set pin lampu sebagai OUTPUT
+  pinMode(lampuPin, OUTPUT);
+
+  // Tampilkan pesan di Serial Monitor
+  Serial.println("ESP8266 Potentiometer Brightness Control");
+}
+
+void loop() {
+  // Baca nilai potensiometer (0-1023)
+  int potValue = analogRead(potentiometerPin);
+
+  // Map nilai potensiometer ke rentang PWM (0-255)
+  int brightness = map(potValue, 0, 1023, 0, 255);
+
+  // Atur tingkat kecerahan lampu menggunakan PWM
+  analogWrite(lampuPin, brightness);
+
+  // Tampilkan nilai potensiometer di Serial Monitor
+  Serial.print("Potentiometer Value: ");
+  Serial.println(potValue);
+
+  // Tunggu sebentar sebelum membaca nilai potensiometer lagi
+  delay(100);
+}

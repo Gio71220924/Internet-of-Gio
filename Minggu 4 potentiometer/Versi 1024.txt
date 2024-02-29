@@ -1,0 +1,31 @@
+Versi 1024
+
+// Include library untuk ESP8266
+
+
+
+// Tentukan pin untuk potensiometer
+const int potentiometerPin = A0; // Ganti A0 dengan pin yang Anda gunakan untuk potensiometer
+
+void setup() {
+  // Inisialisasi Serial Monitor
+  Serial.begin(9600);
+
+  // Set pin potensiometer sebagai INPUT
+  pinMode(potentiometerPin, INPUT);
+
+  // Tampilkan pesan di Serial Monitor
+  Serial.println("ESP8266 Potentiometer Reading");
+}
+
+void loop() {
+  // Baca nilai potensiometer (0-1023)
+  int potValue = analogRead(potentiometerPin);
+
+  // Tampilkan nilai potensiometer di Serial Monitor
+  Serial.print("Potentiometer Value: ");
+  Serial.println(potValue);
+
+  // Tunggu sebentar sebelum membaca nilai potensiometer lagi
+  delay(100);
+}
