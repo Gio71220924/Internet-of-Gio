@@ -1,5 +1,3 @@
-
-
 const int analogpin = A0;
 float value;
 int led12 = D10;
