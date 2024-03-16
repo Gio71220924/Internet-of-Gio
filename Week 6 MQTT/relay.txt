@@ -1,0 +1,14 @@
+relay
+
+
+vcc - volt
+in - pin D
+gnd - gnd
+
+nc- negatifnya lampu
+com - gnd
+
+
+lampu male to female
++ - volt esp
+- nc
