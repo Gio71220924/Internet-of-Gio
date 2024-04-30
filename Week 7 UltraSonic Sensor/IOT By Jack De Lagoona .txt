@@ -1,0 +1,98 @@
+IOT By Jack De Lagoona 
+
+HCR-S04 (Sensor Ping)
+ 
+Echo dan trigger
+transmiter dan receiver
+Menggunakan suara ultrasonik
+
+Schmitt Trigger nigger	
+Modulasi frekuensi pulsa
+
+
+VCC = 3v3
+GND ke GND
+Trigger = D7
+Echo ke D8
+LED nya ke D0
+sisanya kek biasa ya - +
+LED panjang ke +
+
+
+
+
+
+#include <ESP8266WiFi.h>
+#include <PubSubClient.h>
+
+// Define pin
+int triggerPin = D7;
+int echoPin = D8;
+int LED1 = D0;
+int hitung = 0;
+int kosong = 1; // Kosong diatur ke 1 karena LED dimulai dalam keadaan OFF
+
+// Wifi
+const char *ssid = "Redmi10S";
+const char *password = "steve123";
+
+// MQTT Broker
+const char *mqtt_broker = "broker.emqx.io";
+const char *topic = "ukdw/reset";
+const char *mqtt_username = "qwerty";
+const char *mqtt_password = "public";
+const int mqtt_port = 1883;
+
+WiFiClient espClient;
+PubSubClient client(espClient);
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(triggerPin, OUTPUT);
+  pinMode(LED1, OUTPUT);
+  pinMode(echoPin, INPUT);
+  
+  // Set hitung ke 0 saat memulai
+  hitung = 0;
+}
+
+void loop() {
+  long duration, jarak, jarak2;
+  digitalWrite(triggerPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(triggerPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(triggerPin, LOW);
+  duration = pulseIn(echoPin, HIGH);
+  // (Satuan kecepatan suara * waktutempuh)/2
+  // (Satuan kecepatan suara = 340m/s)
+  jarak2 = (duration * 0.034) / 2;
+
+  Serial.print("Jarak = ");  
+  Serial.print(jarak2);     
+  Serial.print(" cm  | | ");       
+  Serial.print("Jumlah = "); 
+  Serial.print(hitung);        
+  Serial.print(" | | ");       
+  if (digitalRead(LED1) == HIGH) {
+    Serial.print("LED Mati");    
+    if (kosong == 1) {
+      hitung = hitung + 1;
+      kosong = 0;
+    }
+  } else {
+    Serial.print("LED Nyala");   
+    kosong = 1;
+  }
+  Serial.println();           
+
+  delay(150);
+
+  if (jarak2 < 10) {
+    digitalWrite(LED1, LOW);
+  } else {
+    digitalWrite(LED1, HIGH);
+  }
+
+  delay(200);
+}

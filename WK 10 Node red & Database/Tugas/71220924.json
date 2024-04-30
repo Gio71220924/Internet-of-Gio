@@ -1,0 +1,114 @@
+[
+    {
+        "id": "94d78a09c6236c24",
+        "type": "debug",
+        "z": "3724be423d83e3c8",
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 760,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "51358f6783b41acf",
+        "type": "mqtt in",
+        "z": "3724be423d83e3c8",
+        "name": "",
+        "topic": "71220924/Sensor",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "9a3fe5b5169e7e71",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 410,
+        "y": 240,
+        "wires": [
+            [
+                "232e89d50e72f241"
+            ]
+        ]
+    },
+    {
+        "id": "232e89d50e72f241",
+        "type": "function",
+        "z": "3724be423d83e3c8",
+        "name": "function 2",
+        "func": "var timestamp = new Date();\n\nvar year = timestamp.getFullYear();\nvar month = timestamp.getMonth();\nvar day = timestamp.getDate();\n\nvar hour = timestamp.getHours();\nvar min = timestamp.getMinutes();\nvar sec = timestamp.getSeconds();\n\nvar date1 = year + \"-\" + month + \"-\" + day;\nvar date2 = hour + \":\" + min + \":\" + sec;\n\nvar datetime = date1 + \" \" + date2;\n\nmsg.timestamp = datetime;\n\nmsg.temperature = msg.payload[0];\n\nmsg.humidity = msg.payload[1];\n\nvar data = {\n    timestamp: msg.timestamp,\n    temperature: msg.temperature,\n    humidity: msg.humidity\n};\nglobal.set(\"data\", data);\n\nmsg.topic = \"INSERT INTO temperatur (timestamp, temperature, humidity) VALUES (?, ?, ?);\";\nmsg.payload = [data.timestamp, data.temperature, data.humidity];\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 560,
+        "y": 180,
+        "wires": [
+            [
+                "e110e7ed9d95f9e9",
+                "94d78a09c6236c24"
+            ]
+        ]
+    },
+    {
+        "id": "e110e7ed9d95f9e9",
+        "type": "mysql",
+        "z": "3724be423d83e3c8",
+        "mydb": "1520ea78ec6a8f51",
+        "name": "",
+        "x": 790,
+        "y": 300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "9a3fe5b5169e7e71",
+        "type": "mqtt-broker",
+        "name": "MQTT",
+        "broker": "broker.emqx.io",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "1520ea78ec6a8f51",
+        "type": "MySQLdatabase",
+        "name": "",
+        "host": "127.0.0.1",
+        "port": "3306",
+        "db": "iot",
+        "tz": "",
+        "charset": "UTF8"
+    }
+]
